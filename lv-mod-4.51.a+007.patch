@@ -1,0 +1,23 @@
+diff -ruN lv-mod-4.51.a-007.orig/src/conf.c lv-mod-4.51.a-007/src/conf.c
+--- lv-mod-4.51.a-007.orig/src/conf.c	2014-12-13 03:13:59.000000000 +0900
++++ lv-mod-4.51.a-007/src/conf.c	2022-10-27 10:13:07.000000000 +0900
+@@ -84,6 +84,7 @@
+ /*#define LV_HELP_PATH	"/usr/local/lib/lv/"*/ /* now defined through make */
+ 
+ private byte *lvHelpFile[ 2 ];
++boolean_t stream_filter;
+ 
+ private void ConfInitArgs( conf_t *conf )
+ {
+diff -ruN lv-mod-4.51.a-007.orig/src/stream.h lv-mod-4.51.a-007/src/stream.h
+--- lv-mod-4.51.a-007.orig/src/stream.h	2014-12-13 03:13:59.000000000 +0900
++++ lv-mod-4.51.a-007/src/stream.h	2022-10-27 10:12:43.000000000 +0900
+@@ -16,7 +16,7 @@
+   int  pid;
+ } stream_t;
+ 
+-public boolean_t stream_filter;
++extern boolean_t stream_filter;
+ 
+ public stream_t *StreamOpen( byte *file );
+ public boolean_t StreamClose( stream_t *st );
