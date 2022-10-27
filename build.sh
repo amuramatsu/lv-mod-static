@@ -135,7 +135,7 @@ chmod +x dockcross
 dockerwork_dir=$(./dockcross bash -c 'echo -n $(pwd)')
 
 # download tarballs
-echo "= downloading dash"
+echo "= downloading lv-mod"
 download "https://github.com/amuramatsu/lv-mod/archive/refs/tags/v${lv_mod_version}.tar.gz" $lv_mod_sha1 "lv-mod-${lv_mod_version}.tar.gz"
 
 echo "= extracting lv-mod"
