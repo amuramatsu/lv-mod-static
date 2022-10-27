@@ -28,6 +28,7 @@ musl_configure=
 lv_mod_configure=
 lv_mod_patch="$(pwd)/lv-mod-${lv_mod_version}.patch"
 curses_configure=
+curses_patch="$(pwd)/netbsd-curses-${netbsd_curses_version}.patch"
 strip=
 arch="$1"
 link_hack=
@@ -170,13 +171,14 @@ fi
 echo "= building netbsd-curses"
 
 curses_dir="netbsd-curses-${netbsd_curses_version}"
-./dockcross bash -c "cd '${curses_dir}' && make 'CFLAGS=$CC -static -Os $CFLAGS' 'CPP=$CC -static $CFLAGS -E' 'LDFLAGS=$LDFLAGS' 'PREFIX=${install_dir}' all-static install-static"
+(cd "$curses_dir" && patch -p1 < "$curses_patch")
+./dockcross bash -c "cd '${curses_dir}' && make 'CC=$CC' 'HOSTCC=gcc' 'CFLAGS=-Os -std=gnu11 $CFLAGS' 'LDFLAGS=-static $LDFLAGS' 'PREFIX=${install_dir}' all-static install-static"
 
 echo "= building lv-mod"
 
 lv_mod_dir="lv-mod-${lv_mod_version//+/-}"
 (cd "$lv_mod_dir" && patch -p1 < "$lv_mod_patch")
-./dockcross bash -c "cd '${lv_mod_dir}/build' && ../src/configure 'CC=$CC -static $CFLAGS' 'CPP=$CC -static $CFLAGS -E' 'LDFLAGS=$LDFLAGS' LIBS='-lcurses -lterminfo' ${lv_mod_configure} --host=x86_64-unknown-linux-gnu"
+./dockcross bash -c "cd '${lv_mod_dir}/build' && ../src/configure 'CC=$CC -static $CFLAGS' 'LDFLAGS=$LDFLAGS' 'LIBS=-lcurses -lterminfo' ${lv_mod_configure} --host=x86_64-unknown-linux-gnu"
 ./dockcross bash -c "cd '${lv_mod_dir}/build' && make"
 
 cd "${curdir}"

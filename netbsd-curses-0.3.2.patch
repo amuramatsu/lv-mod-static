@@ -1,0 +1,10 @@
+--- netbsd-curses-0.3.2.orig/GNUmakefile	2021-05-20 23:53:45.000000000 +0900
++++ netbsd-curses-0.3.2/GNUmakefile	2022-10-28 00:09:46.000000000 +0900
+@@ -400,6 +400,7 @@
+ 
+ tic/%.o: tic/%.c
+ 	$(CC) $(CPPFLAGS) -I./tic $(CFLAGS) -c -o $@ $<
++tic/compile.o: CPPFLAGS+= -DTERMINFO_COMPILE -DTERMINFO_DB -DTERMINFO_COMPAT
+ 
+ libcurses/%.o: libcurses/%.c
+ 	$(CC) $(CPPFLAGS) -I./libcurses $(CFLAGS) -c -o $@ $<
