@@ -7,8 +7,8 @@ lv_mod_version="4.51.a+007"
 lv_mod_sha1="31f815bf8d6a95e2a6b3f3cc648bedf7976d89b5"
 netbsd_curses_version="0.3.2"
 netbsd_curses_sha1="ffffe30ed60ef619e727260ec4994f7bf819728e"
-musl_version="1.2.3"
-musl_sha1="3b6b673196c2dc96b24c5d6028c5fa922457dd26"
+musl_version="1.2.4"
+musl_sha1="78eb982244b857dbacb2ead25cc0f631ce44204d"
 
 release_dir="lv_mod-static-${lv_mod_version}_musl-${musl_version}-${netbsd_curses_version}"
 
