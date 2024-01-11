@@ -3,8 +3,8 @@
 # build script with dockcross
 #
 
-lv_mod_version="4.51.a+007"
-lv_mod_sha1="31f815bf8d6a95e2a6b3f3cc648bedf7976d89b5"
+lv_mod_version="4.51.d+001"
+lv_mod_sha1="05cc5b98873c3f65cc8f8322e53ed4a18091b84a"
 netbsd_curses_version="0.3.2"
 netbsd_curses_sha1="ffffe30ed60ef619e727260ec4994f7bf819728e"
 musl_version="1.2.4"
@@ -137,7 +137,7 @@ dockerwork_dir=$(./dockcross bash -c 'echo -n $(pwd)')
 
 # download tarballs
 echo "= downloading lv-mod"
-download "https://github.com/amuramatsu/lv-mod/archive/refs/tags/v${lv_mod_version}.tar.gz" $lv_mod_sha1 "lv-mod-${lv_mod_version}.tar.gz"
+download "https://github.com/amuramatsu/lv-mod2/archive/refs/tags/lv-${lv_mod_version}.tar.gz" $lv_mod_sha1 "lv-mod-${lv_mod_version}.tar.gz"
 
 echo "= extracting lv-mod"
 gzip -cd "${archives_dir}/lv-mod-${lv_mod_version}.tar.gz" | tar xf - 
@@ -177,9 +177,9 @@ curses_dir="netbsd-curses-${netbsd_curses_version}"
 
 echo "= building lv-mod"
 
-lv_mod_dir="lv-mod-${lv_mod_version//+/-}"
+lv_mod_dir="lv-mod2-lv-${lv_mod_version//+/-}"
 (cd "$lv_mod_dir" && patch -p1 < "$lv_mod_patch")
-./dockcross bash -c "cd '${lv_mod_dir}/build' && ../src/configure 'CC=$CC -static $CFLAGS' 'LDFLAGS=$LDFLAGS' 'LIBS=-lcurses -lterminfo' ${lv_mod_configure} --host=x86_64-unknown-linux-gnu"
+./dockcross bash -c "cd '${lv_mod_dir}/build' && ../configure 'CC=$CC -static $CFLAGS' 'LDFLAGS=$LDFLAGS' 'LIBS=-lcurses -lterminfo' ${lv_mod_configure} --host=x86_64-unknown-linux-gnu"
 ./dockcross bash -c "cd '${lv_mod_dir}/build' && make"
 
 cd "${curdir}"
@@ -190,7 +190,7 @@ echo "= copy lv binary"
 cp "${build_dir}/${lv_mod_dir}/lv.1"     "${release_dir}"
 cp "${build_dir}/${lv_mod_dir}/lv.hlp"   "${release_dir}"
 cp "${build_dir}/${lv_mod_dir}/GPL.txt"  "${release_dir}"
-cp "${build_dir}/${lv_mod_dir}/build/lv" "${release_dir}/lv-${arch}"
+cp "${build_dir}/${lv_mod_dir}/build/src/lv" "${release_dir}/lv-${arch}"
 if [ x"$strip" = x"" ]; then
     "${build_dir}/dockcross" bash -c 'STRIP=$(echo $CC|sed s/-gcc\$/-strip/); $STRIP -s '"'${release_dir}/lv-${arch}'"
 else

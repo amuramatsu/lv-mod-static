@@ -1,0 +1,24 @@
+diff -ruN lv-mod2-lv-4.51.d-001.orig/src/conf.c lv-mod2-lv-4.51.d-001/src/conf.c
+--- lv-mod2-lv-4.51.d-001.orig/src/conf.c	2024-01-08 21:18:34
++++ lv-mod2-lv-4.51.d-001/src/conf.c	2024-01-11 23:31:33
+@@ -555,8 +555,18 @@
+     strcat( helpFile, LV_HELP );
+   }
+ #else /* _WIN32 */
+-  helpFile = Malloc( strlen( LV_HELP_PATH "/" LV_HELP ) + 1 );
+-  strcpy( helpFile, LV_HELP_PATH "/" LV_HELP );
++  {
++    char *p = getenv( "LV_HELP_PATH" );
++    if(p){
++      helpFile = Malloc( strlen( p ) + strlen( "/" LV_HELP ) + 1 );
++      strcpy( helpFile, p );
++      strcat( helpFile, "/" LV_HELP );
++    }
++    else{
++      helpFile = Malloc( strlen( LV_HELP_PATH "/" LV_HELP ) + 1 );
++      strcpy( helpFile, LV_HELP_PATH "/" LV_HELP );
++    }
++  }
+ #endif /* MSDOS */
+ }
+ 
