@@ -7,8 +7,12 @@ lv_mod_version="4.51.d+001"
 lv_mod_sha1="05cc5b98873c3f65cc8f8322e53ed4a18091b84a"
 netbsd_curses_version="0.3.2"
 netbsd_curses_sha1="ffffe30ed60ef619e727260ec4994f7bf819728e"
-musl_version="1.2.4"
-musl_sha1="78eb982244b857dbacb2ead25cc0f631ce44204d"
+musl_version="1.2.5"
+musl_sha1="36210d3423172a40ddcf83c762207c5f760b60a6"
+musl_patch1="https://www.openwall.com/lists/musl/2025/02/13/1/1"
+musl_patch1_sha1="83b881fbe8a5d4d340977723adda4f8ac66592f0"
+musl_patch2="https://www.openwall.com/lists/musl/2025/02/13/1/2"
+musl_patch2_sha1="0ceaa0467429057efce879b6346efa4f58c7cd4d"
 
 release_dir="lv_mod-static-${lv_mod_version}_musl-${musl_version}-${netbsd_curses_version}"
 
@@ -104,11 +108,10 @@ sha1_digest() {
 download() {
     URL="$1"
     SHA="$2"
+    filename="$3"
     [ -d "$archives_dir" ] || mkdir -p "$archives_dir"
-    if [ x"$3" = x"" ]; then
+    if [ x"$filename" = x"" ]; then
 	filename="$(basename "$URL")"
-    else
-	filename="$3"
     fi
     if [ -r "${archives_dir}/${filename}" ]; then
 	digest=$(sha1_digest "${archives_dir}/${filename}")
@@ -144,9 +147,14 @@ gzip -cd "${archives_dir}/lv-mod-${lv_mod_version}.tar.gz" | tar xf -
 
 echo "= downloading musl"
 download "http://www.musl-libc.org/releases/musl-${musl_version}.tar.gz" $musl_sha1
+download $musl_patch1 $musl_patch1_sha1 musl.patch1
+download $musl_patch2 $musl_patch2_sha1 musl.patch2
 
 echo "= extracting musl"
+musl_dir="musl-${musl_version}"
 gzip -cd "${archives_dir}/musl-${musl_version}.tar.gz" | tar xf -
+(cd ${musl_dir} && patch -p1 < "${archives_dir}/musl.patch1")
+(cd ${musl_dir} && patch -p1 < "${archives_dir}/musl.patch2")
 
 echo "= downloading netbsd-curses"
 download "http://ftp.barfooze.de/pub/sabotage/tarballs/netbsd-curses-${netbsd_curses_version}.tar.xz" $netbsd_curses_sha1
