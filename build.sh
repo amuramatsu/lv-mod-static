@@ -67,16 +67,19 @@ case $arch in
     mipsel)
 	dockcross_arch=linux-mipsel
 	;;
-    powerpc) #broken
-	dockcross_arch=linux-ppc64le
-	musl_configure="--target powerpc-linux-gnu"
-	lv_mod_configure="--target powerpc-uknown-linux-gnu"
-	CFLAGS="-m32 -mbig -mlong-double-64"
-	link_hack=-melf_powerpc
+    powerpc)
+	dockcross_arch=linux-ppc
+	CFLAGS="-mbig -mlong-double-64"
 	;;
     ppc64el)
 	dockcross_arch=linux-ppc64le
 	CFLAGS="-mlong-double-64"
+	;;
+    riscv32)
+	dockcross_arch=linux-riscv32
+	;;
+    riscv64)
+	dockcross_arch=linux-riscv64
 	;;
     s390x)
 	dockcross_arch=linux-s390x
